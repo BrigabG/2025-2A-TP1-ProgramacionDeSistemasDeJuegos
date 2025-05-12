@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Excercise1
@@ -6,24 +5,24 @@ namespace Excercise1
     public class Enemy : Character
     {
         [SerializeField] private float speed = 5;
-        [SerializeField] private string playerId = "Player";
         private ICharacter _player;
         private string _logTag;
-
+        
+        public void SetTarget(ICharacter target)
+        {
+            if (target == null)
+                Debug.LogError($"{_logTag} Player not found!");
+            _player = target;
+            
+        }
+        
         private void Reset()
             => id = nameof(Enemy);
 
         private void Awake()
             => _logTag = $"{name}({nameof(Enemy).Colored("#555555")}):";
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            //TODO: Get the reference to the player.
-            if (_player == null)
-                Debug.LogError($"{_logTag} Player not found!");
-        }
-
+        
         private void Update()
         {
             if (_player == null)

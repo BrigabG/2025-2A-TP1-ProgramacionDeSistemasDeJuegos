@@ -3,18 +3,22 @@ using UnityEngine;
 
 namespace Excercise1
 {
-    public class Character : MonoBehaviour, ICharacter
+    public abstract class Character : MonoBehaviour, ICharacter
     {
-        [SerializeField] protected string id;
+        [SerializeField] public string id;
 
         protected virtual void OnEnable()
         {
-            //TODO: Add to CharacterService. The id should be the given serialized field. 
+            // Register with the CharacterService
+            if (!CharacterService.Instance.Register(id, this))
+                Debug.LogWarning($"[Character] Failed to register character with id '{id}' (already existed?)");
         }
 
         protected virtual void OnDisable()
         {
-            //TODO: Remove from CharacterService.
+            // Unregister from the CharacterService
+            if (!CharacterService.Instance.Unregister(id))
+                Debug.LogWarning($"[Character] Failed to unregister character with id '{id}'");
         }
     }
 }
