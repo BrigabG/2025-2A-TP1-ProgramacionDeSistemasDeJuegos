@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7e3ac8de965a3c4d8a320e63fe3a36f, type: 3}
   m_Name: DefaultEnemyStats
   m_EditorClassIdentifier: 
-  speed: 15
-  color: {r: 0.36552152, g: 0.6981132, b: 0.37162423, a: 1}
+  speed: 5
+  color: {r: 1, g: 1, b: 1, a: 1}

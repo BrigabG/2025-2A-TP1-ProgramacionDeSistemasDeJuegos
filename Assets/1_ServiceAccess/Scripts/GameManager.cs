@@ -7,14 +7,7 @@ namespace Excercise1
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private List<SceneRef> scenes = new();
-        void AssignTargets()
-        {
-            var player = CharacterService.Instance.Get("Player");
-            var enemies = Object.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-            foreach (var enemy in enemies)
-                enemy.SetTarget(player);
-        }
-
+        
         private async void Start()
         {
             foreach (var scene in scenes)
@@ -24,7 +17,11 @@ namespace Excercise1
                     continue;
                 await loadSceneAsync;
             }
-            AssignTargets();
+            var assigner = Object.FindAnyObjectByType<TargetAssigner>();
+            if (assigner != null)
+                assigner.TryAssignAllTargets();
+            else
+                Debug.LogWarning("GameManager: No TargetAssigner found in the scene.");
         }
     }
 }
