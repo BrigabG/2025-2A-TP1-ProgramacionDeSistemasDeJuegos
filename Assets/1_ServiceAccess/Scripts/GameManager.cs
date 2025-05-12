@@ -10,7 +10,8 @@ namespace Excercise1
         void AssignTargets()
         {
             var player = CharacterService.Instance.Get("Player");
-            foreach (var enemy in FindObjectsOfType<Enemy>())
+            var enemies = Object.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+            foreach (var enemy in enemies)
                 enemy.SetTarget(player);
         }
 
@@ -25,7 +26,5 @@ namespace Excercise1
             }
             AssignTargets();
         }
-        
     }
-    
 }

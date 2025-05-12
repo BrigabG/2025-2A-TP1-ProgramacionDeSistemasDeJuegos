@@ -1,12 +1,14 @@
+using System;
 using UnityEngine;
 
 namespace Excercise1
 {
     public class Enemy : Character
     {
-        [SerializeField] private float speed = 5;
+        [SerializeField] private EnemyStats stats;
         private ICharacter _player;
         private string _logTag;
+        private Renderer _renderer;
         
         public void SetTarget(ICharacter target)
         {
@@ -20,7 +22,11 @@ namespace Excercise1
             => id = nameof(Enemy);
 
         private void Awake()
-            => _logTag = $"{name}({nameof(Enemy).Colored("#555555")}):";
+        {
+            _logTag = $"{name}({nameof(Enemy).Colored("#555555")}):";
+            _renderer = GetComponent<Renderer>();
+        }
+           
 
         
         private void Update()
@@ -28,7 +34,8 @@ namespace Excercise1
             if (_player == null)
                 return;
             var direction = _player.transform.position - transform.position;
-            transform.position += direction.normalized * (speed * Time.deltaTime);
+            transform.position += direction.normalized * (stats.speed * Time.deltaTime);
+            _renderer.material.color = stats.color;
         }
     }
 }

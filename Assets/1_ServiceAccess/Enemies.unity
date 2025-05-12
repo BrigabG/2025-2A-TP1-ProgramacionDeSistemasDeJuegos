@@ -396,8 +396,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: Enemy
-  speed: 4
-  playerId: Player
+  stats: {fileID: 11400000, guid: 034cdd4f84bae73449ba40f0a2abc4c7, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

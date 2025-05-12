@@ -6,7 +6,7 @@ namespace Excercise1
     public abstract class Character : MonoBehaviour, ICharacter
     {
         [SerializeField] public string id;
-
+        private CharacterStats stats;
         protected virtual void OnEnable()
         {
             // Register with the CharacterService
