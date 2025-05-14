@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,14 +10,26 @@ namespace Gameplay
         [SerializeField] private InputActionReference moveInput;
         [SerializeField] private InputActionReference jumpInput;
         [SerializeField] private float airborneSpeedMultiplier = .5f;
-        //TODO: This booleans are not flexible enough. If we want to have a third jump or other things, it will become a hazzle.
-        private bool _isJumping;
-        private bool _isDoubleJumping;
+        [SerializeField] private int maxJumps = 2;
+        
+        
         private Character _character;
+        private MovementStateMachine _movementStateMachine;
+        private Vector3 _moveValue;
+        private bool _jumpPressed;
         private Coroutine _jumpCoroutine;
 
+        public Character Character => _character;
+        public float AirborneSpeedMultiplier => airborneSpeedMultiplier;
+        public int MaxJumps => maxJumps;
+
         private void Awake()
-            => _character = GetComponent<Character>();
+        {
+            _character = GetComponent<Character>();
+            _movementStateMachine = new MovementStateMachine();
+            _movementStateMachine.Initialize(new WalkState(this));
+
+        }
 
         private void OnEnable()
         {
@@ -42,28 +55,26 @@ namespace Gameplay
 
         private void HandleMoveInput(InputAction.CallbackContext ctx)
         {
-            var direction = ctx.ReadValue<Vector2>().ToHorizontalPlane();
-            if (_isJumping || _isDoubleJumping)
-                direction *= airborneSpeedMultiplier;
-            _character?.SetDirection(direction);
+            _moveValue = ctx.ReadValue<Vector2>().ToHorizontalPlane();
         }
 
         private void HandleJumpInput(InputAction.CallbackContext ctx)
         {
-            //TODO: This function is barely readable. We need to refactor how we control the jumping
-            if (_isJumping)
-            {
-                if (_isDoubleJumping)
-                    return;
-                RunJumpCoroutine();
-                _isDoubleJumping = true;
-                return;
-            }
-            RunJumpCoroutine();
-            _isJumping = true;
+            _jumpPressed = ctx.performed;
         }
 
-        private void RunJumpCoroutine()
+        private void Update()
+        {
+            _movementStateMachine.HandleInput(_moveValue, _jumpPressed);
+            _jumpPressed = false;
+        }
+        
+        private void FixedUpdate()
+        {
+            _movementStateMachine.PhysicsUpdate();
+        }
+
+        public void RunJumpCoroutine()
         {
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
@@ -72,14 +83,9 @@ namespace Gameplay
 
         private void OnCollisionEnter(Collision other)
         {
-            foreach (var contact in other.contacts)
-            {
-                if (Vector3.Angle(contact.normal, Vector3.up) < 5)
-                {
-                    _isJumping = false;
-                    _isDoubleJumping = false;
-                }
-            }
+            _movementStateMachine.OnCollisionEnter(other);
         }
+
+        public void TransitionTo(IMovementState nextState) => _movementStateMachine.TransitionTo(nextState);
     }
 }
