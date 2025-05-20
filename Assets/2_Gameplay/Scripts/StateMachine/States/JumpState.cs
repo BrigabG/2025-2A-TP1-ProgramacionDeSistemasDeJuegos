@@ -12,26 +12,19 @@ namespace Gameplay
         public JumpState(PlayerController playerController)
         {
             _controller = playerController;
-            _jumpsLeft = _controller.MaxJumps - 1;
-            //_character = playerController.GetComponent<Character>();
+            _jumpsLeft = _controller.Settings.maxJumps - 1;
         }
 
         public void Enter()
         {
             _controller.RunJumpCoroutine();
             _controller.Character.OnLand += OnJumpEnd;
-            
-            /*
-            if (_jumpCoroutine != null)
-                _controller.StopCoroutine(_jumpCoroutine);
-            _jumpCoroutine = _controller.StartCoroutine(_character.Jump());
-            */       
         }
         
 
         public void HandleInput(Vector3 moveInput, bool jumpPressed)
         {
-            var direction = moveInput * _controller.AirborneSpeedMultiplier;
+            var direction = moveInput * _controller.Settings.airborneSpeedMultiplier;
             _controller.Character.SetDirection(direction);
             
             if (jumpPressed && _jumpsLeft > 0)

@@ -7,9 +7,7 @@ namespace Gameplay
     [RequireComponent(typeof(Rigidbody))]
     public class Character : MonoBehaviour
     {
-        [SerializeField] private float acceleration = 10;
-        [SerializeField] private float speed = 3;
-        [SerializeField] private float jumpForce = 10;
+        [SerializeField] private MovementSettings settings;
         
         private Vector3 _direction = Vector3.zero;
         private Rigidbody _rigidbody;
@@ -20,8 +18,8 @@ namespace Gameplay
 
         private void FixedUpdate()
         {
-            var scaledDirection = _direction * acceleration;
-            if (_rigidbody.linearVelocity.IgnoreY().magnitude < speed)
+            var scaledDirection = _direction * settings.acceleration;
+            if (_rigidbody.linearVelocity.IgnoreY().magnitude < settings.speed)
                 _rigidbody.AddForce(scaledDirection, ForceMode.Force);
         }
 
@@ -30,7 +28,7 @@ namespace Gameplay
         public IEnumerator Jump()
         {
             yield return new WaitForFixedUpdate();
-            _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _rigidbody.AddForce(Vector3.up * settings.jumpForce, ForceMode.Impulse);
         }
         
         private void OnCollisionEnter(Collision other)

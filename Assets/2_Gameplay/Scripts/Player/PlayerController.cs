@@ -9,8 +9,8 @@ namespace Gameplay
     {
         [SerializeField] private InputActionReference moveInput;
         [SerializeField] private InputActionReference jumpInput;
-        [SerializeField] private float airborneSpeedMultiplier = .5f;
-        [SerializeField] private int maxJumps = 2;
+        [SerializeField] private MovementSettings settings;
+
         
         
         private Character _character;
@@ -20,8 +20,9 @@ namespace Gameplay
         private Coroutine _jumpCoroutine;
 
         public Character Character => _character;
-        public float AirborneSpeedMultiplier => airborneSpeedMultiplier;
-        public int MaxJumps => maxJumps;
+        
+        public MovementSettings Settings => settings;
+        
 
         private void Awake()
         {
