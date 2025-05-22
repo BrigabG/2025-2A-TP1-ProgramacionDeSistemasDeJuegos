@@ -15,7 +15,6 @@ namespace Excercise1
             if (target == null)
                 Debug.LogError($"{_logTag} Player not found!");
             _player = target;
-            
         }
         
         private void Reset()
@@ -25,9 +24,9 @@ namespace Excercise1
         {
             _logTag = $"{name}({nameof(Enemy).Colored("#555555")}):";
             _renderer = GetComponent<Renderer>();
+            
         }
            
-
         
         private void Update()
         {

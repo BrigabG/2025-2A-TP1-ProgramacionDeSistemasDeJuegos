@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Excercise1
@@ -10,14 +9,14 @@ namespace Excercise1
         protected virtual void OnEnable()
         {
             // Register with the CharacterService
-            if (!CharacterService.Instance.Register(id, this))
+            if (!CharacterService.Instance.TryAddCharacter(id, this))
                 Debug.LogWarning($"[Character] Failed to register character with id '{id}' (already existed?)");
         }
 
         protected virtual void OnDisable()
         {
             // Unregister from the CharacterService
-            if (!CharacterService.Instance.Unregister(id))
+            if (!CharacterService.Instance.TryRemoveCharacter(id))
                 Debug.LogWarning($"[Character] Failed to unregister character with id '{id}'");
         }
     }

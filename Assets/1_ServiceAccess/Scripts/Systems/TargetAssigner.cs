@@ -5,12 +5,7 @@ namespace Excercise1
     public class TargetAssigner : MonoBehaviour
     {
         [SerializeField] private string playerId = "Player";
-
-        private void Start()
-        {
-            TryAssignAllTargets();
-        }
-
+        
         public void TryAssignAllTargets()
         {
             var player = CharacterService.Instance.Get(playerId);

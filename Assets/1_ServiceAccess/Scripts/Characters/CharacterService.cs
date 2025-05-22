@@ -20,14 +20,14 @@ namespace Excercise1
         
         private readonly Dictionary<string, ICharacter> _charactersById = new();
 
-        public bool Register(string id, ICharacter character)
+        public bool TryAddCharacter(string id, ICharacter character)
         {
             if (string.IsNullOrWhiteSpace(id) || character == null)
                 return false;
 
             return _charactersById.TryAdd(id, character);
         }
-        public bool Unregister(string id)
+        public bool TryRemoveCharacter(string id)
         {
             return _charactersById.Remove(id);
         }
