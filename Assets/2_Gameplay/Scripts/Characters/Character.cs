@@ -30,13 +30,5 @@ namespace Gameplay
             yield return new WaitForFixedUpdate();
             _rigidbody.AddForce(Vector3.up * settings.jumpForce, ForceMode.Impulse);
         }
-        
-        private void OnCollisionEnter(Collision other)
-        {
-            if (other.gameObject.CompareTag("Ground"))
-            {
-                OnLand?.Invoke();
-            }
-        }
     }
 }

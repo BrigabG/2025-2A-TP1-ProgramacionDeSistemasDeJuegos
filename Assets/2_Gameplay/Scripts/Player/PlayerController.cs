@@ -27,7 +27,7 @@ namespace Gameplay
         private void Awake()
         {
             _character = GetComponent<Character>();
-            _movementStateMachine = new MovementStateMachine();
+            _movementStateMachine = new MovementStateMachine(this);
             _movementStateMachine.Initialize(new WalkState(this));
 
         }

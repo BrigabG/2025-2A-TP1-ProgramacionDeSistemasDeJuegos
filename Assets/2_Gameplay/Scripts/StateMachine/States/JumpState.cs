@@ -5,8 +5,6 @@ namespace Gameplay
     public class JumpState : IMovementState
     {
         private readonly PlayerController _controller;
-        private Character _character;
-        private Coroutine _jumpCoroutine;
         private int _jumpsLeft;
 
         public JumpState(PlayerController playerController)
@@ -18,11 +16,10 @@ namespace Gameplay
         public void Enter()
         {
             _controller.RunJumpCoroutine();
-            _controller.Character.OnLand += OnJumpEnd;
         }
         
 
-        public void HandleInput(Vector3 moveInput, bool jumpPressed)
+        public MovementIntent HandleInput(Vector3 moveInput, bool jumpPressed)
         {
             var direction = moveInput * _controller.Settings.airborneSpeedMultiplier;
             _controller.Character.SetDirection(direction);
@@ -32,34 +29,25 @@ namespace Gameplay
                 _controller.RunJumpCoroutine();
                 _jumpsLeft--;
             }
+            return MovementIntent.NoneIntent;
         }
 
-        public void PhysicsUpdate()
-        {
-        }
+        public MovementIntent PhysicsUpdate() => MovementIntent.NoneIntent;
 
-        public void OnCollisionEnter(Collision other)
+        public MovementIntent OnCollisionEnter(Collision other)
         {
             foreach (var contact in other.contacts)
             {
                 if (Vector3.Angle(contact.normal, Vector3.up) < 5)
                 {
-                    _controller.TransitionTo(new WalkState(_controller));
-                    break;
+                    Debug.Log("Landed");
+                    return new MovementIntent(MovementIntent.IntentType.Landed);
                 }
             }
-
+            Debug.Log("No landed");
+            return MovementIntent.NoneIntent;
         }
 
-        public void Exit()
-        {
-            _controller.Character.OnLand -= OnJumpEnd;
-        }
-
-        private void OnJumpEnd()
-        {
-            _controller.TransitionTo(new WalkState(_controller));        
-        }
-        
+        public void Exit(){}
     }
 }

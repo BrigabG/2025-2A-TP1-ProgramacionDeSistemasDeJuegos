@@ -6,34 +6,38 @@ namespace Gameplay
     {
         private readonly PlayerController _controller;
         private Vector3 _movement;
-        //private Character _character;
 
         public WalkState(PlayerController controller)
         {
             _controller = controller;
-            //_character = playerController.GetComponent<Character>();
         }
 
         public void Enter()
         {
+            Debug.Log("Entrando en Walk State");
             _movement = Vector3.zero;
         }
 
-        public void HandleInput(Vector3 moveInput, bool jumpPressed)
+        public MovementIntent HandleInput(Vector3 moveInput, bool jumpPressed)
         {
             _movement = moveInput;
             if (jumpPressed)
             {
-                _controller.TransitionTo(new JumpState(_controller));
+                return new MovementIntent(MovementIntent.IntentType.WantToJump);
             }
+            return MovementIntent.NoneIntent;
         }
 
-        public void PhysicsUpdate()
+        public MovementIntent PhysicsUpdate()
         {
             _controller.Character.SetDirection(_movement);
+            return MovementIntent.NoneIntent;
         }
 
-        public void OnCollisionEnter(Collision other) { }
+        public MovementIntent OnCollisionEnter(Collision other)
+        {
+            return MovementIntent.NoneIntent;
+        }
 
         public void Exit(){}
     
