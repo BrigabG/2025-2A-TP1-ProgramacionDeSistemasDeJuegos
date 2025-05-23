@@ -14,7 +14,7 @@ namespace Gameplay
 
         public void Enter()
         {
-            Debug.Log("Entrando en Walk State");
+            Debug.Log("Entered Walk State");
             _movement = Vector3.zero;
         }
 

@@ -9,7 +9,7 @@ namespace Gameplay
                 None,
                 WantToJump,
                 Landed,
-                //...
+                // Add more intent types as needed
             }
     
             public IntentType Type { get; }
